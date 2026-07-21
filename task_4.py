@@ -1,4 +1,7 @@
+from functools import wraps
+
 def input_error(func):
+    @wraps(func)
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -55,7 +58,7 @@ def main():
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
-        command, *args = parse_input(user_input)
+        command, args = parse_input(user_input)
 
         if command in ["close", "exit"]:
             print("Good bye!")
