@@ -1,11 +1,11 @@
+import re
 from typing import Callable
 
 def generator_numbers(text: str):
-    for s in text.split():
-        try:
-           yield float(s)
-        except ValueError:
-          continue
+    pattern = r"(?<=\s)\d+(?:\.\d+)?(?=\s)"
+    
+    for match in re.finditer(pattern, text):
+        yield float(match.group())
 
 def sum_profit(text: str, func: Callable):
     return sum(func(text))
