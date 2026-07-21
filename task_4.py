@@ -1,13 +1,13 @@
 def input_error(func):
-    def inner(*args, **contacts):
+    def inner(*args, **kwargs):
         try:
-            return func(*args, **contacts)
+            return func(*args, **kwargs)
         except ValueError:
             return "Error: Give me name and phone please"
-        except KeyError:
-            return f"Contact '{KeyError.args[0]}' not found"
+        except KeyError as e:
+            return f"Contact '{e.args[0]}' not found"
         except IndexError:
-            return f"Contact '{IndexError.args[0]}' not found"
+            return f"Error: Enter user name"
     return inner
 
 def parse_input(user_input):
@@ -15,7 +15,7 @@ def parse_input(user_input):
         return "", []
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
-    return cmd, *args
+    return cmd, args
 
 @input_error
 def add_contact(args, contacts):
@@ -28,19 +28,18 @@ def change_contact(args, contacts):
     name, phone = args
     if name in contacts:
         contacts[name] = phone
-        return (f"{name}'s contact number has been changed to {phone}")
+        return f"{name}'s contact number has been changed to {phone}"
     else:
-        return (f"contact {name} dosent exist")
+        return f"contact {name} dosent exist"
 
 @input_error
 def find_phone(args, contacts):
-    
+    name_to_find = args[0]
     for name, phone in contacts.items():
-      if name.lower() == args[0].lower():
-        return (f"The phone number for {name}: {phone}")
+        if name.lower() == name_to_find.lower():
+            return f"The phone number for {name}: {phone}"
     
-    # return (f"Contact {args[0]} not found.")
-    raise KeyError(args[0])
+    raise KeyError(name_to_find)
 
 def show_all(contacts):
     if not contacts:
